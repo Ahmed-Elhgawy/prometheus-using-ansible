@@ -1,0 +1,43 @@
+---
+# tasks file for roles/alert-manager
+- name: Create group {{ alert_manager_user }}
+  ansible.builtin.group:
+    name: "{{ alert_manager_user }}"
+    state: present
+
+- name: Create user with no shell
+  ansible.builtin.user:
+    name: "{{ alert_manager_user }}"
+    group: "{{ alert_manager_user }}"
+    create_home: false
+    shell: /bin/false
+
+- name: Download alert manager installation directory
+  ansible.builtin.get_url:
+    url: "{{ alert_manager_dir_url }}"
+    dest: /tmp/
+    mode: '0755'
+  notify:
+    - Extract alert manager files
+    - Copy binary files-1
+    - Copy binary files-2
+
+- name: Create alert manager configration directories
+  ansible.builtin.file:
+    path: "{{ alert_manager_conf_dir }}"
+    state: directory
+    owner: "{{ alert_manager_user }}"
+    group: "{{ alert_manager_user }}"
+    mode: '0755'
+  notify:
+    - Copy configration file
+
+- name: Create alert manager service file
+  ansible.builtin.copy:
+    src: alertmanager.service
+    dest: /etc/systemd/system/
+    owner: "{{ alert_manager_user }}"
+    group: "{{ alert_manager_user }}"
+    mode: '0755'
+  notify:
+    - Start and enable {{ alert_manager_svc }}

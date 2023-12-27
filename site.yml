@@ -1,0 +1,31 @@
+---
+- name: Install prometheus
+  hosts: prometheus
+  gather_facts: false
+  roles:
+    - docker          # install docke in hosts
+    - prometheus      # install prometheus in hosts works at port "9090"
+
+- name: Install node exporter
+  hosts: prometheus
+  gather_facts: false
+  roles:
+    - node-exporter   # install node-exporter in hosts works at port "9100"
+
+- name: Install alert manager
+  hosts: prometheus
+  gather_facts: false
+  roles:
+    - alert-manager   # install alert-manager works at port "9093"
+
+- name: Install grafana
+  hosts: prometheus
+  gather_facts: false
+  roles:
+    - grafana         # install grafana works at port "3000"
+
+- name: Test nodeJs app
+  hosts: prometheus
+  gather_facts: false
+  roles:
+    - client-library  # install test app (the app works at port 8000)

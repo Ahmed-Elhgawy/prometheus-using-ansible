@@ -1,0 +1,40 @@
+---
+# handlers file for roles/alert-manager
+- name: Extract alert manager files
+  ansible.builtin.unarchive:
+    src: "{{ alert_manager_tmp_dir }}.tar.gz"
+    dest: /tmp/
+    remote_src: true
+
+- name: Copy binary files-1
+  ansible.builtin.copy:
+    src: "{{ alert_manager_tmp_dir }}/alertmanager"
+    dest: "{{ alert_manager_usr_dir }}"
+    owner: "{{ alert_manager_user }}"
+    group: "{{ alert_manager_user }}"
+    mode: '0755'
+    remote_src: true
+
+- name: Copy binary files-2
+  ansible.builtin.copy:
+    src: "{{ alert_manager_tmp_dir }}/amtool"
+    dest: "{{ alert_manager_usr_dir }}"
+    owner: "{{ alert_manager_user }}"
+    group: "{{ alert_manager_user }}"
+    mode: '0755'
+    remote_src: true
+
+- name: Copy configration file
+  ansible.builtin.copy:
+    src: alertmanager.yml
+    dest: "{{ alert_manager_conf_dir }}"
+    owner: "{{ alert_manager_user }}"
+    group: "{{ alert_manager_user }}"
+    mode: '0755'
+
+- name: Start and enable {{ alert_manager_svc }}
+  ansible.builtin.systemd_service:
+    daemon_reload: true
+    name: "{{ alert_manager_svc }}"
+    state: started
+    enabled: true

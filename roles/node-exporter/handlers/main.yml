@@ -1,0 +1,23 @@
+---
+# handlers file for roles/node-exporter
+- name: Extract node exporter files
+  ansible.builtin.unarchive:
+    src: "{{ node_exporter_tmp_dir }}.tar.gz"
+    dest: /tmp/
+    remote_src: true
+
+- name: Copy binary files
+  ansible.builtin.copy:
+    src: "{{ node_exporter_tmp_dir }}/node_exporter"
+    dest: "{{ node_exporter_usr_dir }}"
+    owner: "{{ node_exporter_user }}"
+    group: "{{ node_exporter_user }}"
+    mode: '0755'
+    remote_src: true
+
+- name: Start and enable {{ node_exporter_svc }}
+  ansible.builtin.systemd_service:
+    daemon_reload: true
+    name: "{{ node_exporter_svc }}"
+    state: started
+    enabled: true

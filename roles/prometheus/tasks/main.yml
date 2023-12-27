@@ -1,0 +1,60 @@
+---
+# tasks file for roles/prometheus
+- name: Create group {{ prometheus_user }}
+  ansible.builtin.group:
+    name: "{{ prometheus_user }}"
+    state: present
+
+- name: Create user with no shell
+  ansible.builtin.user:
+    name: "{{ prometheus_user }}"
+    group: "{{ prometheus_user }}"
+    create_home: false
+    shell: /bin/false
+
+- name: Create prometheus configration directories
+  ansible.builtin.file:
+    path: "{{ prometheus_conf_dir }}"
+    state: directory
+    owner: "{{ prometheus_user }}"
+    group: "{{ prometheus_user }}"
+    mode: '0755'
+
+- name: Create prometheus configration directories
+  ansible.builtin.file:
+    path: "{{ prometheus_lib_dir }}"
+    state: directory
+    owner: "{{ prometheus_user }}"
+    group: "{{ prometheus_user }}"
+    mode: '0755'
+
+- name: Download prometheus installation directory
+  ansible.builtin.get_url:
+    url: "{{ prometheus_dir_url }}"
+    dest: /tmp/
+    mode: '0755'
+  notify:
+    - Extract prometheus files
+    - Copy files to thier quilivant configration directory-1
+    - Copy files to thier quilivant configration directory-2
+    - Copy files to thier quilivant configration directory-3
+    - Copy binary files-1
+    - Copy binary files-2
+
+- name: Copy rules file to {{ prometheus_conf_dir }}
+  ansible.builtin.copy:
+    src: rules.yml
+    dest: "{{ prometheus_conf_dir }}"
+    owner: "{{ prometheus_user }}"
+    group: "{{ prometheus_user }}"
+    mode: '0755'
+
+- name: Create prometheus service file
+  ansible.builtin.copy:
+    src: prometheus.service
+    dest: /etc/systemd/system/
+    owner: "{{ prometheus_user }}"
+    group: "{{ prometheus_user }}"
+    mode: '0755'
+  notify:
+    - Start and enable {{ prometheus_svc }}

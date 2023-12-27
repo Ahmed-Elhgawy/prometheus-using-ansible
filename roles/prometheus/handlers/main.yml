@@ -1,0 +1,59 @@
+---
+# handlers file for roles/prometheus
+- name: Extract prometheus files
+  ansible.builtin.unarchive:
+    src: "{{ prometheus_tmp_dir }}.tar.gz"
+    dest: /tmp/
+    remote_src: true
+
+- name: Copy files to thier quilivant configration directory-1
+  ansible.builtin.copy:
+    src: "{{ prometheus_tmp_dir }}/consoles"
+    dest: "{{ prometheus_conf_dir }}"
+    owner: "{{ prometheus_user }}"
+    group: "{{ prometheus_user }}"
+    mode: '0755'
+    remote_src: true
+
+- name: Copy files to thier quilivant configration directory-2
+  ansible.builtin.copy:
+    src: "{{ prometheus_tmp_dir }}/console_libraries"
+    dest: "{{ prometheus_conf_dir }}"
+    owner: "{{ prometheus_user }}"
+    group: "{{ prometheus_user }}"
+    mode: '0755'
+    remote_src: true
+
+- name: Copy files to thier quilivant configration directory-3
+  ansible.builtin.copy:
+    src: "{{ prometheus_tmp_dir }}/prometheus.yml"
+    dest: "{{ prometheus_conf_dir }}"
+    owner: "{{ prometheus_user }}"
+    group: "{{ prometheus_user }}"
+    mode: '0755'
+    remote_src: true
+
+- name: Copy binary files-1
+  ansible.builtin.copy:
+    src: "{{ prometheus_tmp_dir }}/prometheus"
+    dest: "{{ prometheus_usr_dir }}"
+    owner: "{{ prometheus_user }}"
+    group: "{{ prometheus_user }}"
+    mode: '0755'
+    remote_src: true
+
+- name: Copy binary files-2
+  ansible.builtin.copy:
+    src: "{{ prometheus_tmp_dir }}/promtool"
+    dest: "{{ prometheus_usr_dir }}"
+    owner: "{{ prometheus_user }}"
+    group: "{{ prometheus_user }}"
+    mode: '0755'
+    remote_src: true
+
+- name: Start and enable {{ prometheus_svc }}
+  ansible.builtin.systemd_service:
+    daemon_reload: true
+    name: "{{ prometheus_svc }}"
+    state: started
+    enabled: true

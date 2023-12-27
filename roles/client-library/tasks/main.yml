@@ -1,0 +1,25 @@
+---
+# tasks file for roles/client-library
+- name: Installe {{ client_library_pakages }}
+  ansible.builtin.apt:
+    update_cache: true
+    name: "{{ client_library_pakages }}"
+    state: present
+
+- name: Create app directory
+  ansible.builtin.file:
+    path: "{{ client_library_app_dir }}"
+    state: directory
+    owner: "{{ client_library_user }}"
+    group: "{{ client_library_user }}"
+    mode: '0755'
+  notify:
+    - Install app require
+
+- name: Copy app file
+  ansible.builtin.copy:
+    src: node.js
+    dest: "{{ client_library_app_dir }}"
+    owner: "{{ client_library_user }}"
+    group: "{{ client_library_user }}"
+    mode: '0755'

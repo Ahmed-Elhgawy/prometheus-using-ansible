@@ -1,0 +1,11 @@
+---
+# vars file for roles/alert-manager
+alert_manager_user: alertmanager
+
+alert_manager_dir_url: https://github.com/prometheus/alertmanager/releases/download/v0.22.2/alertmanager-0.22.2.linux-amd64.tar.gz
+
+alert_manager_tmp_dir: /tmp/alertmanager-0.22.2.linux-amd64
+alert_manager_usr_dir: /usr/local/bin/
+alert_manager_conf_dir: /etc/alertmanager/
+
+alert_manager_svc: alertmanager

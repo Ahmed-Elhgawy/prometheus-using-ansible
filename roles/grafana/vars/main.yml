@@ -1,0 +1,14 @@
+---
+# vars file for roles/grafana
+grafana_prerequist:
+  - gnupg2
+  - curl
+  - software-properties-common
+
+grafana_apt_url: https://apt.grafana.com/gpg.key
+
+grafana_repo_url: https://apt.grafana.com
+
+grafana_pakage: grafana
+
+grafana_svc: grafana-server

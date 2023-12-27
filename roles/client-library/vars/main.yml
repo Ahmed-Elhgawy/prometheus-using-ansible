@@ -1,0 +1,13 @@
+---
+# vars file for roles/client-library
+client_library_pakages:
+  - nodejs
+  - npm
+
+clint_library_requirments:
+  - express
+  - prom-client
+
+client_library_user: ubuntu
+
+client_library_app_dir: /app

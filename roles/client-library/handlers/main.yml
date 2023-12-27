@@ -1,0 +1,8 @@
+---
+# handlers file for roles/client-library
+- name: Install app require
+  community.general.npm:
+    name: "{{ item }}"
+    path: "{{ client_library_app_dir }}"
+    state: present
+  loop: "{{ clint_library_requirments }}"

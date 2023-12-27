@@ -1,0 +1,32 @@
+---
+# tasks file for roles/node-exporter
+- name: Create group {{ node_exporter_user }}
+  ansible.builtin.group:
+    name: "{{ node_exporter_user }}"
+    state: present
+
+- name: Create user with no shell
+  ansible.builtin.user:
+    name: "{{ node_exporter_user }}"
+    group: "{{ node_exporter_user }}"
+    create_home: false
+    shell: /bin/false
+
+- name: Download node_exporter installation directory
+  ansible.builtin.get_url:
+    url: "{{ node_exporter_dir_url }}"
+    dest: /tmp/
+    mode: '0755'
+  notify:
+    - Extract node exporter files
+    - Copy binary files
+
+- name: Create node_exporter service file
+  ansible.builtin.copy:
+    src: node_exporter.service
+    dest: /etc/systemd/system/
+    owner: "{{ node_exporter_user }}"
+    group: "{{ node_exporter_user }}"
+    mode: '0755'
+  notify:
+    - Start and enable {{ node_exporter_svc }}

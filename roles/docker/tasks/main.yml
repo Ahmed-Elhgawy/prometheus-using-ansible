@@ -1,0 +1,26 @@
+---
+# tasks file for roles/install-docker
+- name: Install {{ docker_pakages }}
+  ansible.builtin.apt:
+    update_cache: true
+    name: "{{ docker_pakages }}"
+    state: present
+
+- name: Add Docker GPG apt Key
+  ansible.builtin.apt_key:
+    url: "{{ docker_key_url }}"
+    state: present
+
+- name: Add Docker Repository
+  ansible.builtin.apt_repository:
+    repo: deb {{ docker_repo_url }} focal stable
+    state: present
+
+- name: Install Docker
+  ansible.builtin.apt:
+    update_cache: true
+    name: "{{ docker_pakage }}"
+    state: present
+  notify:
+    - Add user to Docker group
+    - Change file mode

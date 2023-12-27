@@ -1,0 +1,16 @@
+---
+# vars file for roles/install-docker
+docker_pakages:
+  - ca-certificates
+  - curl
+  - gnupg
+
+docker_key_url: https://download.docker.com/linux/ubuntu/gpg
+
+docker_repo_url: https://download.docker.com/linux/ubuntu
+
+docker_pakage: docker-ce
+
+docker_user: ubuntu
+
+docker_path: /var/run/docker.sock

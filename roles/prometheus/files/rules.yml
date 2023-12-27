@@ -1,0 +1,12 @@
+groups:
+  - name: nodeJsApp
+    rules:
+      - record: job:up
+        expr: up{job="nodeJsApp_metrics"}
+      - alert: nodeJsAppDown
+        expr: job:up == 0
+  
+  - name: nodeExporter
+    rules:
+      - record: cpu:seconds
+        expr: node_cpu_seconds_total{job="prometheus_ec2"}

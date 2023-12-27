@@ -1,0 +1,11 @@
+---
+# handlers file for roles/install-docker
+- name: Add user to Docker group
+  ansible.builtin.user:
+    name: "{{ docker_user }}"
+    group: docker
+
+- name: Change file mode
+  ansible.builtin.file:
+    path: "{{ docker_path }}"
+    mode: '0666'

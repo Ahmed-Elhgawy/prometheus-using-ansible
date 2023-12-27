@@ -1,0 +1,24 @@
+---
+# tasks file for roles/grafana
+- name: Download requirements
+  ansible.builtin.apt:
+    name: "{{ grafana_prerequist }}"
+    state: present
+
+- name: Add grafana APT key
+  ansible.builtin.apt_key:
+    url: "{{ grafana_apt_url }}"
+    state: present
+
+- name: Add grafana APT repository
+  ansible.builtin.apt_repository:
+    repo: deb {{ grafana_repo_url }} stable main
+    state: present
+
+- name: Install {{ grafana_pakage }}
+  ansible.builtin.apt:
+    update_cache: true
+    name: "{{ grafana_pakage }}"
+    state: present
+  notify:
+    - Start and enabel {{ grafana_svc }}

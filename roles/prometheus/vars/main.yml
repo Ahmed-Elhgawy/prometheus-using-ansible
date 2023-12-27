@@ -1,0 +1,12 @@
+---
+# vars file for roles/prometheus
+prometheus_user: prometheus
+
+prometheus_conf_dir: /etc/prometheus/
+prometheus_lib_dir: /var/lib/prometheus/
+prometheus_tmp_dir: /tmp/prometheus-2.43.0.linux-amd64
+prometheus_usr_dir: /usr/local/bin/
+
+prometheus_dir_url: https://github.com/prometheus/prometheus/releases/download/v2.43.0/prometheus-2.43.0.linux-amd64.tar.gz
+
+prometheus_svc: prometheus

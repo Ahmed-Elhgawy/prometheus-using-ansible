@@ -1,0 +1,8 @@
+---
+# handlers file for roles/grafana
+- name: Start and enabel {{ grafana_svc }}
+  ansible.builtin.systemd_service:
+    daemon_reload: true
+    name: "{{ grafana_svc }}"
+    state: started
+    enabled: true
